@@ -7,7 +7,6 @@ import androidx.lifecycle.ViewModel
 class GameViewModel : ViewModel() {
 
 
-
     private var _score = 0
     val score: Int
         get() = _score
@@ -19,7 +18,9 @@ class GameViewModel : ViewModel() {
         get() = _currentScrambledWord // гетар для фрагмента для безопасности
 
 
-    private val wordsList: MutableList<String> = mutableListOf() // изменяемый список слов который мы
+    private val wordsList: MutableList<String> =
+        mutableListOf() // изменяемый список слов который мы
+
     // храним в игре чтобы избежать повторений
     private lateinit var currentWord: String // слова которое пытаеться рашифровать игорок
 
@@ -32,7 +33,6 @@ class GameViewModel : ViewModel() {
         super.onCleared()
         Log.d("GameFragment", "GameViewModel destroyed!")
     }
-
 
 
     private fun getNextWord() {
@@ -52,7 +52,16 @@ class GameViewModel : ViewModel() {
         }
     }
 
+    fun nextWord(): Boolean { //вспомогательный метод для обробатки даных в нутри вью вернет true
+        // если количество слов меньше 10
+        return if (currentWordCount < MAX_NO_OF_WORDS) {
+            getNextWord()
+            true
+        } else
+            false
 
-
-
+    }
 }
+
+
+
