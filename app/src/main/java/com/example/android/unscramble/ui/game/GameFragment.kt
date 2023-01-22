@@ -25,6 +25,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.example.android.unscramble.R
 import com.example.android.unscramble.databinding.GameFragmentBinding
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 /**
  * Fragment where the game is played, contains the game logic.
@@ -126,6 +127,23 @@ class GameFragment : Fragment() {
     private fun updateNextWordOnScreen() {
         binding.textViewUnscrambledWord.text = viewModel.currentScrambledWord
     }
+
+    private fun showFinalScoreDialog() { // функция для показа финального диалогового окна с счетом
+        MaterialAlertDialogBuilder(requireContext()) // метод из метериалДиалог библеотеки джетпак
+        // получает контекст из фрагмента
+            .setTitle(getString(R.string.congratulations)) //передаем заголовок в окно из строк
+            .setMessage(getString(R.string.you_scored, viewModel.score)) // отображаем количество очков
+            .setCancelable(false) // чтобы диалоговое окно не исчезала при нажатие кнопки назад
+            .setNegativeButton(getString(R.string.exit)) {_, _ -> // добовляем кнопку выход
+                exitGame()
+            }
+            .setPositiveButton(getString(R.string.play_again)) {_, _ ->
+                restartGame() // добовляем кнопку повторить игру
+            }
+            .show() // показываем диалоговое окно
+    }
+
+
 
     override fun onDetach() {
         super.onDetach()
