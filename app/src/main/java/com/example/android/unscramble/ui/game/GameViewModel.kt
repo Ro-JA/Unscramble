@@ -61,6 +61,18 @@ class GameViewModel : ViewModel() {
             false
 
     }
+
+    private fun increaseScore() {
+        _score += SCORE_INCREASE // увеличевает очки на 20
+    }
+
+    fun isUserWordCorrect(playerWord: String): Boolean { // проверяет слово игрока с зашифрованым
+        if (playerWord.equals(currentWord, true)) {
+            increaseScore() // увеличевает счет
+            return true
+        }
+        return false
+    }
 }
 
 

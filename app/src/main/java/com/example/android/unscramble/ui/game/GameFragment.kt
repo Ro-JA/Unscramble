@@ -79,7 +79,12 @@ class GameFragment : Fragment() {
      * Skips the current word without changing the score.
      * Increases the word count.
      */
-    private fun onSkipWord() {
+    private fun onSkipWord() { // отоброжает зашифрованое слово и стерает старое
+        if (viewModel.nextWord()) { // проверяем количество слов
+            updateNextWordOnScreen()  //вызываем новое зашифрованое слово
+        } else {
+            showFinalScoreDialog() // вызываем диалоговое окно
+        }
 
     }
 
@@ -111,7 +116,8 @@ class GameFragment : Fragment() {
     /*
     * Sets and resets the text field error status.
     */
-    private fun setErrorTextField(error: Boolean) {
+    private fun setErrorTextField(error: Boolean) { // выводит текст об ошибке при вводе закадированого
+        //слова
         if (error) {
             binding.textField.isErrorEnabled = true
             binding.textField.error = getString(R.string.try_again)
