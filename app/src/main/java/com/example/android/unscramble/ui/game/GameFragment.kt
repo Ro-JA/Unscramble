@@ -35,8 +35,6 @@ class GameFragment : Fragment() {
     private val viewModel: GameViewModel by viewModels()
 
 
-
-
     // Binding object instance with access to the views in the game_fragment.xml layout
     private lateinit var binding: GameFragmentBinding
 
@@ -45,12 +43,16 @@ class GameFragment : Fragment() {
     // first fragment
 
     override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View {
         // Inflate the layout XML file and return a binding object instance
         binding = GameFragmentBinding.inflate(inflater, container, false)
         Log.d("GameFragment", "GameFragment created/re-created!")
+        Log.d(
+            "GameFragment", "Word: ${viewModel.currentScrambledWord}" +
+                    " Score: ${viewModel.score} WordCount: ${viewModel.currentWordCount}"
+        )
         return binding.root
     }
 
@@ -64,15 +66,27 @@ class GameFragment : Fragment() {
         updateNextWordOnScreen()
         binding.score.text = getString(R.string.score, 0)
         binding.wordCount.text = getString(
-                R.string.word_count, 0, MAX_NO_OF_WORDS)
+            R.string.word_count, 0, MAX_NO_OF_WORDS
+        )
     }
 
     /*
     * Checks the user's word, and updates the score accordingly.
     * Displays the next scrambled word.
     */
-    private fun onSubmitWord() {
+    private fun onSubmitWord() { // проверяем вариант веденого слова пользователя
+        val playerWord = binding.textInputEditText.text.toString() // достаем слово
 
+        if (viewModel.isUserWordCorrect(playerWord)) { // слово игрока ровно слову из массива
+            setErrorTextField(false) // сбрасываем поле ввода
+            if (viewModel.nextWord()) { // слов меньше 10
+                updateNextWordOnScreen() // выводим новое зашифрованое словоа
+            } else {
+                showFinalScoreDialog() // выводим диалоговое окно
+            }
+        } else {
+            setErrorTextField(true) // выводим попробуй еще раз
+        }
     }
 
     /*
@@ -97,11 +111,32 @@ class GameFragment : Fragment() {
         return String(tempWord)
     }
 
+    private fun showFinalScoreDialog() { // функция для показа финального диалогового окна с счетом
+        MaterialAlertDialogBuilder(requireContext()) // метод из метериалДиалог библеотеки джетпак
+            // получает контекст из фрагмента
+            .setTitle(getString(R.string.congratulations)) //передаем заголовок в окно из строк
+            .setMessage(
+                getString(
+                    R.string.you_scored,
+                    viewModel.score
+                )
+            ) // отображаем количество очков
+            .setCancelable(false) // чтобы диалоговое окно не исчезала при нажатие кнопки назад
+            .setNegativeButton(getString(R.string.exit)) { _, _ -> // добовляем кнопку выход
+                exitGame()
+            }
+            .setPositiveButton(getString(R.string.play_again)) { _, _ ->
+                restartGame() // добовляем кнопку повторить игру
+            }
+            .show() // показываем диалоговое окно
+    }
+
     /*
      * Re-initializes the data in the ViewModel and updates the views with the new data, to
      * restart the game.
      */
     private fun restartGame() {
+        viewModel.reinitializeData()
         setErrorTextField(false)
         updateNextWordOnScreen()
     }
@@ -134,20 +169,6 @@ class GameFragment : Fragment() {
         binding.textViewUnscrambledWord.text = viewModel.currentScrambledWord
     }
 
-    private fun showFinalScoreDialog() { // функция для показа финального диалогового окна с счетом
-        MaterialAlertDialogBuilder(requireContext()) // метод из метериалДиалог библеотеки джетпак
-        // получает контекст из фрагмента
-            .setTitle(getString(R.string.congratulations)) //передаем заголовок в окно из строк
-            .setMessage(getString(R.string.you_scored, viewModel.score)) // отображаем количество очков
-            .setCancelable(false) // чтобы диалоговое окно не исчезала при нажатие кнопки назад
-            .setNegativeButton(getString(R.string.exit)) {_, _ -> // добовляем кнопку выход
-                exitGame()
-            }
-            .setPositiveButton(getString(R.string.play_again)) {_, _ ->
-                restartGame() // добовляем кнопку повторить игру
-            }
-            .show() // показываем диалоговое окно
-    }
 
 
 

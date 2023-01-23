@@ -73,6 +73,14 @@ class GameViewModel : ViewModel() {
         }
         return false
     }
+
+    fun reinitializeData() { // сбрасываем данные
+        _score = 0
+        _currentWordCount = 0
+        wordsList.clear()
+        getNextWord()
+
+    }
 }
 
 
