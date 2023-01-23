@@ -58,12 +58,15 @@ class GameFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel.currentScrambledWord.observe(viewLifecycleOwner, { newWord -> // устоновлеваем наблюдателя
+            // за текушем зашифрованым словом подключаясь к жизненому циклу фрагмента через viewLifecycleOwenr
+            binding.textViewUnscrambledWord.text = newWord // второй параметр лямбда функция передает новое
+            // слово
+        } )
 
         // Setup a click listener for the Submit and Skip buttons.
         binding.submit.setOnClickListener { onSubmitWord() }
         binding.skip.setOnClickListener { onSkipWord() }
-        // Update the UI
-        updateNextWordOnScreen()
         binding.score.text = getString(R.string.score, 0)
         binding.wordCount.text = getString(
             R.string.word_count, 0, MAX_NO_OF_WORDS
@@ -80,7 +83,6 @@ class GameFragment : Fragment() {
         if (viewModel.isUserWordCorrect(playerWord)) { // слово игрока ровно слову из массива
             setErrorTextField(false) // сбрасываем поле ввода
             if (viewModel.nextWord()) { // слов меньше 10
-                updateNextWordOnScreen() // выводим новое зашифрованое словоа
             } else {
                 showFinalScoreDialog() // выводим диалоговое окно
             }
@@ -95,7 +97,7 @@ class GameFragment : Fragment() {
      */
     private fun onSkipWord() { // отоброжает зашифрованое слово и стерает старое
         if (viewModel.nextWord()) { // проверяем количество слов
-            updateNextWordOnScreen()  //вызываем новое зашифрованое слово
+
         } else {
             showFinalScoreDialog() // вызываем диалоговое окно
         }
@@ -138,7 +140,6 @@ class GameFragment : Fragment() {
     private fun restartGame() {
         viewModel.reinitializeData()
         setErrorTextField(false)
-        updateNextWordOnScreen()
     }
 
     /*
@@ -161,14 +162,6 @@ class GameFragment : Fragment() {
             binding.textInputEditText.text = null
         }
     }
-
-    /*
-     * Displays the next scrambled word on screen.
-     */
-    private fun updateNextWordOnScreen() {
-        binding.textViewUnscrambledWord.text = viewModel.currentScrambledWord
-    }
-
 
 
 
