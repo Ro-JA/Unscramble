@@ -9,11 +9,11 @@ import androidx.lifecycle.ViewModel
 class GameViewModel : ViewModel() {
 
 
-    private var _score = 0
-    val score: Int
+    private val _score = MutableLiveData(0) // количество очков храняться в изменяемом обекте
+    val score: LiveData<Int> // хранения данных
         get() = _score
-    private var _currentWordCount = 0 // количество слов в игре
-    val currentWordCount: Int
+    private val _currentWordCount = MutableLiveData(0) // количество слов в игре
+    val currentWordCount: LiveData<Int>
         get() = _currentWordCount
     private val _currentScrambledWord = MutableLiveData<String>() // изменяемый обект хранения данных
     val currentScrambledWord: LiveData<String> // неизменяемый обект данных текущее зашифрованое слово
@@ -51,14 +51,14 @@ class GameViewModel : ViewModel() {
         } else {
             _currentScrambledWord.value = String(tempWord) // устанвливает значения если есть активные
             //наблюдатели будет отправлено им
-            ++_currentWordCount
+            _currentWordCount.value = (_currentWordCount.value)?.inc()
             wordsList.add(currentWord)
         }
     }
 
     fun nextWord(): Boolean { //вспомогательный метод для обробатки даных в нутри вью вернет true
         // если количество слов меньше 10
-        return if (currentWordCount < MAX_NO_OF_WORDS) {
+        return if (currentWordCount.value!! < MAX_NO_OF_WORDS) {
             getNextWord()
             true
         } else
@@ -67,7 +67,7 @@ class GameViewModel : ViewModel() {
     }
 
     private fun increaseScore() {
-        _score += SCORE_INCREASE // увеличевает очки на 20
+        _score.value = (_score.value)?.plus(SCORE_INCREASE) // увеличевает очки на 20
     }
 
     fun isUserWordCorrect(playerWord: String): Boolean { // проверяет слово игрока с зашифрованым
@@ -79,8 +79,8 @@ class GameViewModel : ViewModel() {
     }
 
     fun reinitializeData() { // сбрасываем данные
-        _score = 0
-        _currentWordCount = 0
+        _score.value = 0
+        _currentWordCount.value = 0
         wordsList.clear()
         getNextWord()
 
