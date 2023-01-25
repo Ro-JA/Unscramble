@@ -22,6 +22,15 @@
     -->
 
     <data>
+        <!-- добавили свойства для доступа из viewModel -->
+        <variable
+            name="gameViewModel"
+            type="com.example.android.unscramble.ui.game.GameViewModel" />
+
+        <!-- переменая для хранения количество слов в игре -->
+        <variable
+            name="maxNoOfWord"
+            type="int" />
 
     </data>
 
@@ -68,18 +77,19 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView_unscrambled_word" />
 
+            <!-- добавили зашифрованое слово на премую в макте -->
             <TextView
                 android:id="@+id/textView_unscrambled_word"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/default_margin"
                 android:layout_marginBottom="@dimen/default_margin"
+                android:text="@{gameViewModel.currentScrambledWord}"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Headline3"
                 app:layout_constraintBottom_toTopOf="@+id/textView_instructions"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/word_count"
-                tools:text="Scramble word" />
+                app:layout_constraintTop_toBottomOf="@+id/word_count" />
 
             <TextView
                 android:id="@+id/word_count"
