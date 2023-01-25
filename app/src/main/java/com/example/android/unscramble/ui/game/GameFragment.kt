@@ -58,17 +58,20 @@ class GameFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.currentScrambledWord.observe(viewLifecycleOwner, { newWord -> // устоновлеваем наблюдателя
-            // за текушем зашифрованым словом подключаясь к жизненому циклу фрагмента через viewLifecycleOwenr
-            binding.textViewUnscrambledWord.text = newWord // второй параметр лямбда функция передает новое
-            // слово
-        } )
+        viewModel.currentScrambledWord.observe(
+            viewLifecycleOwner,
+            { newWord -> // устоновлеваем наблюдателя
+                // за текушем зашифрованым словом подключаясь к жизненому циклу фрагмента через viewLifecycleOwenr
+                binding.textViewUnscrambledWord.text =
+                    newWord // второй параметр лямбда функция передает новое
+                // слово
+            })
 
         // Setup a click listener for the Submit and Skip buttons.
         binding.submit.setOnClickListener { onSubmitWord() }
         binding.skip.setOnClickListener { onSkipWord() }
-        viewModel.score.observe(viewLifecycleOwner, {newScore ->
-           binding.score.text = getString(R.string.score, newScore)// добавили очки из лайвДата
+        viewModel.score.observe(viewLifecycleOwner, { newScore ->
+            binding.score.text = getString(R.string.score, newScore)// добавили очки из лайвДата
         })
 
         viewModel.currentWordCount.observe(viewLifecycleOwner,
@@ -167,7 +170,6 @@ class GameFragment : Fragment() {
             binding.textInputEditText.text = null
         }
     }
-
 
 
     override fun onDetach() {
