@@ -1,6 +1,5 @@
 package com.example.android.unscramble.ui.game
 
-import android.os.Build.VERSION_CODES.M
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.TtsSpan
@@ -49,10 +48,6 @@ class GameViewModel : ViewModel() {
         getNextWord() // вызываем случайно слово
     }
 
-    override fun onCleared() {
-        super.onCleared()
-        Log.d("GameFragment", "GameViewModel destroyed!")
-    }
 
 
     private fun getNextWord() {

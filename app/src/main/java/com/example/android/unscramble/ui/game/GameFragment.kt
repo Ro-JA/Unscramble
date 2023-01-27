@@ -44,8 +44,7 @@ class GameFragment : Fragment() {
     // first fragment
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         // исполузуем привязку данных, придстовления в макете теперь могут получать доступ к данным
         // в приложений
@@ -53,8 +52,8 @@ class GameFragment : Fragment() {
 
         Log.d("GameFragment", "GameFragment created/re-created!")
         Log.d(
-            "GameFragment", "Word: ${viewModel.currentScrambledWord}" +
-                    " Score: ${viewModel.score} WordCount: ${viewModel.currentWordCount}"
+            "GameFragment",
+            "Word: ${viewModel.currentScrambledWord}" + " Score: ${viewModel.score} WordCount: ${viewModel.currentWordCount}"
         )
         return binding.root
     }
@@ -66,7 +65,6 @@ class GameFragment : Fragment() {
         binding.maxNoOfWord = MAX_NO_OF_WORDS
         // указали фрагмент в качестве владельца жизненого цикла для привязки набдлюдателя
         binding.lifecycleOwner = viewLifecycleOwner
-
 
 
         // Setup a click listener for the Submit and Skip buttons.
@@ -105,14 +103,6 @@ class GameFragment : Fragment() {
 
     }
 
-    /*
-     * Gets a random word for the list of words and shuffles the letters in it.
-     */
-    private fun getNextScrambledWord(): String {
-        val tempWord = allWordsList.random().toCharArray()
-        tempWord.shuffle()
-        return String(tempWord)
-    }
 
     private fun showFinalScoreDialog() { // функция для показа финального диалогового окна с счетом
         MaterialAlertDialogBuilder(requireContext()) // метод из метериалДиалог библеотеки джетпак
@@ -120,18 +110,15 @@ class GameFragment : Fragment() {
             .setTitle(getString(R.string.congratulations)) //передаем заголовок в окно из строк
             .setMessage(
                 getString(
-                    R.string.you_scored,
-                    viewModel.score.value
+                    R.string.you_scored, viewModel.score.value
                 )
             ) // отображаем количество очков
             .setCancelable(false) // чтобы диалоговое окно не исчезала при нажатие кнопки назад
             .setNegativeButton(getString(R.string.exit)) { _, _ -> // добовляем кнопку выход
                 exitGame()
-            }
-            .setPositiveButton(getString(R.string.play_again)) { _, _ ->
+            }.setPositiveButton(getString(R.string.play_again)) { _, _ ->
                 restartGame() // добовляем кнопку повторить игру
-            }
-            .show() // показываем диалоговое окно
+            }.show() // показываем диалоговое окно
     }
 
     /*
@@ -165,8 +152,4 @@ class GameFragment : Fragment() {
     }
 
 
-    override fun onDetach() {
-        super.onDetach()
-        Log.d("Game Fragment", "GameFragment destroyed!")
-    }
 }
